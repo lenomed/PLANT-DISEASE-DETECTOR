@@ -118,6 +118,7 @@ print(model.summary())
 #Model training
 train_hist = model.fit(x=training_set, validation_data=validation_set, epochs=10)
 print(train_hist)
+print(train_hist.history)
 
 #Model evaluation
 
@@ -179,3 +180,7 @@ print(y_pred, y_pred.shape)
 #The output of the model is a probability distribution over the 38 classes for each image in the test set. To get the predicted class for each image, we can use the argmax function to get the index of the class with the highest probability.
 predicted_classes = tf.argmax(y_pred, axis=1)
 print(predicted_classes, predicted_classes.shape)
+
+true_categories = [y for x,y in test_set    ]
+true_categories = tf.concat(true_categories, axis=0)
+print(true_categories, true_categories.shape)
