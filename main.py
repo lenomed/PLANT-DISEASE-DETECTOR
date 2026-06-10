@@ -6,6 +6,8 @@ import tensorflow as tf
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, Dropout
+from sklearn.metrics import classification_report, confusion_matrix
+
 
 training_set = keras.utils.image_dataset_from_directory(
     'PlantVillage/train',
@@ -184,3 +186,14 @@ print(predicted_classes, predicted_classes.shape)
 true_categories = [y for x,y in test_set    ]
 true_categories = tf.concat(true_categories, axis=0)
 print(true_categories, true_categories.shape)
+
+y_true = tf.argmax(true_categories, axis=1)
+print(y_true, y_true.shape)
+
+# calculate precision recall and f1 score
+print("Classification Report:-------------------------------------------")
+print(classification_report(y_true, predicted_classes, target_names=test_set.class_names))
+print('\n')
+print("Confusion Matrix:-------------------------------------------")
+print(confusion_matrix(y_true, predicted_classes, target_names=test_set.class_names))
+# i added class_names to both the classification report and confusion matrix to get the class names instead of the class indices in the output. This will make it easier to interpret the results and also to identify which classes are being misclassified.
