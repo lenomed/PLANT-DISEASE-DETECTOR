@@ -41,3 +41,9 @@ plt.title(f'Predicted Class: {model_predicted_class}')
 plt.xticks([])  # Hide x-axis ticks
 plt.yticks([])  # Hide y-axis ticks
 plt.show()
+
+print(model.summary())
+
+for classes in test_set.class_names:
+    print(f'The disease class is: {classes}')
+    break
