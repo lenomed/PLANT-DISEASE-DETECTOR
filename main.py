@@ -7,9 +7,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import tensorflow as tf
+import numpy as np
 import os
 os.add_dll_directory(
     r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin")
+
+# Set seed for reproducibility
+tf.random.set_seed(42)
 
 print(tf.config.list_physical_devices('GPU'))
 
@@ -45,7 +49,7 @@ validation_set = keras.utils.image_dataset_from_directory(
     color_mode="rgb",
     batch_size=32,
     image_size=(128, 128),
-    shuffle=True,
+    shuffle=False,
     seed=None,
     validation_split=None,
     subset=None,
@@ -144,14 +148,14 @@ print(f'Validation Loss: {validation_loss}')
 print(f'Validation Accuracy: {validation_accuracy}')
 
 # Saving the model
-# model.save('plant_disease_model.h5')# you can also save the model as .keras or .tf format
-# .keras uses less space and is faster to save and load
+model.save('plant_disease_model.keras')
+print("Model saved to plant_disease_model.keras")
 
 # Saving the training history to a json file because i might plot it out later
 with open('training_history.json', 'w') as f:
     json.dump(train_hist.history, f)
 
-epochs = [i for i in range(1, 11)]
+epochs = list(range(1, len(train_hist.history['accuracy']) + 1))
 plt.plot(epochs, train_hist.history['accuracy'], label='Training Accuracy')
 plt.plot(
     epochs, train_hist.history['val_accuracy'], label='Validation Accuracy')
@@ -163,6 +167,18 @@ plt.legend()
 # Save the figure
 plt.savefig("accuracy_plot.png", bbox_inches='tight', dpi=150)
 print("Accuracy plot saved to accuracy_plot.png")
+plt.show()
+
+# Loss plot
+plt.figure()
+plt.plot(epochs, train_hist.history['loss'], label='Training Loss')
+plt.plot(epochs, train_hist.history['val_loss'], label='Validation Loss')
+plt.title('Training and Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.savefig("loss_plot.png", bbox_inches='tight', dpi=150)
+print("Loss plot saved to loss_plot.png")
 plt.show()
 
 
